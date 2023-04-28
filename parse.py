@@ -2,9 +2,9 @@
 
 import argparse
 from typing import Optional, Dict, Any
-from anki import add_anki_card, add_anki_deck
-from plainbook import load_paragraphs
-from latin_parser import LatinParser
+from lib.anki import add_anki_card, add_anki_deck
+from lib.plainbook import load_paragraphs
+from lib.latin_parser import LatinParser
 
 
 def main() -> None:
@@ -22,13 +22,18 @@ def main() -> None:
         # and add words to Anki deck
         # - TODO: finish the remaining parts of speech
         with LatinParser(corpus=paragraphs, frequency=FREQ) as parser:
-            if (verbs := parser.verbs()) or (nouns := parser.nouns()):
+            verbs = parser.verbs()
+            nouns = parser.nouns()
+
+            if verbs or nouns:
                 add_anki_deck(TITLE)
 
+            if verbs:
                 for v in verbs:
                     fields = {"Front": v["definitions"], "Back": v["word"]}
-                    add_anki_card(TITLE, "Basic", fields, v["transivity"])
+                    add_anki_card(TITLE, "Basic", fields, v["transitivity"])
 
+            if nouns:
                 for n in nouns:
                     fields = {"Front": n["definitions"], "Back": n["word"]}
                     add_anki_card(TITLE, "Basic", fields, n["gender"])
