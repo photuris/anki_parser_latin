@@ -4,7 +4,7 @@ import argparse
 from typing import Optional, Dict, Any
 from anki import add_anki_card, add_anki_deck
 from plainbook import load_paragraphs
-from latin import LatinParser
+from latin_parser import LatinParser
 
 
 def main() -> None:
