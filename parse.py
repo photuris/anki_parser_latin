@@ -2,9 +2,9 @@
 
 import argparse
 from typing import Optional, Dict, Any
-from lib.anki import add_anki_card, add_anki_deck
-from lib.plainbook import load_paragraphs
-from lib.latin_parser import LatinParser
+from src.anki import add_anki_card, add_anki_deck
+from src.plainbook import load_paragraphs, extract_gutenberg_body
+from src.latin_parser import LatinParser
 
 
 def main() -> None:
@@ -30,13 +30,17 @@ def main() -> None:
 
             if verbs:
                 for v in verbs:
-                    fields = {"Front": v["definitions"], "Back": v["word"]}
-                    add_anki_card(TITLE, "Basic", fields, v["transitivity"])
+                    if v:
+                        fields = {"Front": v["definitions"], "Back": v["word"]}
+                        add_anki_card(
+                            TITLE, "Basic", fields, v["transitivity"]
+                        )
 
             if nouns:
                 for n in nouns:
-                    fields = {"Front": n["definitions"], "Back": n["word"]}
-                    add_anki_card(TITLE, "Basic", fields, n["gender"])
+                    if n:
+                        fields = {"Front": n["definitions"], "Back": n["word"]}
+                        add_anki_card(TITLE, "Basic", fields, n["gender"])
 
 
 def _parse_args() -> Dict[str, bool]:
